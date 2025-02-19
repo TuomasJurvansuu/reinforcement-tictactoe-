@@ -10,10 +10,16 @@ while True:
     
     if game.make_move(move, current_player):
         game.print_board()
-        current_player = "O" if current_player == "X" else "X"
+        
         winner = game.check_winner()
         if winner:
             print(f"Pelaaja {winner} voitti!")
             break
+
+        if game.is_draw():
+            print("Peli päättyi tasapeliin!")
+            break
+
+        current_player = "O" if current_player == "X" else "X"
     else:
         print("Virheellinen siirto, yritä uudelleen.")
