@@ -24,3 +24,5 @@ class TicTacToe:
         for combo in winning_combinations:
             if self.board[combo[0]] == self.board[combo[1]] == self.board[combo[2]] != " ":
                 return self.board[combo[0]]
+    def is_draw(self):
+        return " " not in self.board
