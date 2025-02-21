@@ -1,13 +1,19 @@
 from game import TicTacToe
+from agent import RandomAgent  # Tuo AI-agentti
 
 game = TicTacToe()
-game.print_board()
+agent = RandomAgent("O")  # AI pelaa "O":na
 
+game.print_board()
 current_player = "X"
 
 while True:
-    move = int(input(f"Pelaaja {current_player}, valitse ruutu (0-8): "))
-    
+    if current_player == "X":
+        move = int(input(f"Pelaaja {current_player}, valitse ruutu (0-8): "))
+    else:
+        move = agent.choose_move(game.board)  # AI valitsee siirron
+        print(f"AI valitsi ruudun {move}")
+
     if game.make_move(move, current_player):
         game.print_board()
         
