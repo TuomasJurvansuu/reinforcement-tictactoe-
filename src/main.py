@@ -1,5 +1,5 @@
 from game import TicTacToe
-from agent import RandomAgent  # Tuo AI-agentti
+from agent import RandomAgent  # AI-agentti
 
 game = TicTacToe()
 agent = RandomAgent("O")  # AI pelaa "O":na
