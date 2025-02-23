@@ -1,5 +1,5 @@
 from game import TicTacToe
-from agent import RandomAgent  # AI-agentti
+from agent import RandomAgent  # Tuo AI-agentti
 
 game = TicTacToe()
 agent = RandomAgent("O")  # AI pelaa "O":na
@@ -9,7 +9,11 @@ current_player = "X"
 
 while True:
     if current_player == "X":
-        move = int(input(f"Pelaaja {current_player}, valitse ruutu (0-8): "))
+        try:
+            move = int(input(f"Pelaaja {current_player}, valitse ruutu (0-8): "))
+        except ValueError:
+            print("Virheellinen syöte! Anna numero väliltä 0-8.")
+            continue
     else:
         move = agent.choose_move(game.board)  # AI valitsee siirron
         print(f"AI valitsi ruudun {move}")

@@ -15,6 +15,7 @@ class TicTacToe:
             print("Päivitetty lauta:", self.board)
             return True
         return False  # Estetään siirto, jos ruutu on jo varattu
+
     def check_winner(self):
         winning_combinations = [
             (0, 1, 2), (3, 4, 5), (6, 7, 8),  # Vaakasuorat
@@ -23,6 +24,9 @@ class TicTacToe:
         ]
         for combo in winning_combinations:
             if self.board[combo[0]] == self.board[combo[1]] == self.board[combo[2]] != " ":
+                print(f"Voittoruudut: {combo}")  # Näyttää voittoruudut
                 return self.board[combo[0]]
+        return None
+
     def is_draw(self):
         return " " not in self.board
