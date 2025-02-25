@@ -86,11 +86,9 @@ while running:
             winner = game.check_winner()
             if winner:
                 print(f"Pelaaja {winner} voitti!")
-                running = False
             elif game.is_draw():
                 print("Peli päättyi tasapeliin!")
-                running = False
-            if running:
+            else:
                 current_player = "X"
     
 
