@@ -1,4 +1,5 @@
 import pygame
+from game import TicTacToe
 
 pygame.init()
 
@@ -15,7 +16,7 @@ FONT = pygame.font.Font(None, 120)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ristinolla")
 
-board = [" "] * 9
+game = TicTacToe()
 current_player = "X"
 
 def draw_grid():
@@ -24,7 +25,7 @@ def draw_grid():
         pygame.draw.line(screen, BLACK, (0, i * CELL_SIZE), (WIDTH, i * CELL_SIZE), LINE_WIDTH)
 
 def draw_marks():
-    for i, mark in enumerate(board):
+    for i, mark in enumerate(game.board):
         if mark != " ":
             row, col = divmod(i, GRID_SIZE)
             x = col * CELL_SIZE + CELL_SIZE // 3
@@ -49,9 +50,17 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             cell = cell_from_mouse(event.pos)
-            if board[cell] == " ":
-                board[cell] = current_player
-                current_player = "O" if current_player == "X" else "X"
+            if game.board[cell] == " ":
+                game.board[cell] = current_player
+                winner = game.check_winner()
+                if winner:
+                    print(f"Pelaaja {winner} voitti!")
+                    running = False
+                elif game.is_draw():
+                    print("Peli päättyi tasapeliin!")
+                    running = False
+                if running:
+                    current_player = "O" if current_player == "X" else "X"
 
     pygame.display.flip()
 
