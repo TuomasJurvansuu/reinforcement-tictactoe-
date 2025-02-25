@@ -1,5 +1,6 @@
 import pygame
 from game import TicTacToe
+from agent import RandomAgent
 
 pygame.init()
 
@@ -18,6 +19,7 @@ pygame.display.set_caption("Ristinolla")
 
 game = TicTacToe()
 current_player = "X"
+agent = RandomAgent("O")
 
 def draw_grid():
     for i in range(1, GRID_SIZE):
@@ -60,7 +62,22 @@ while running:
                     print("Peli päättyi tasapeliin!")
                     running = False
                 if running:
-                    current_player = "O" if current_player == "X" else "X"
+                    current_player = "O"
+    if running and current_player == "O":
+        pygame.time.delay(500)
+        ai_move = agent.choose_move(game.board)
+        if ai_move is not None:
+            game.board[ai_move] = "O"
+            winner = game.check_winner()
+            if winner:
+                print(f"Pelaaja {winner} voitti!")
+                running = False
+            elif game.is_draw():
+                print("Peli päättyi tasapeliin!")
+                running = False
+            if running:
+                current_player = "X"
+    
 
     pygame.display.flip()
 
