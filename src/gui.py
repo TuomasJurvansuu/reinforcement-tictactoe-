@@ -1,6 +1,6 @@
 import pygame
 from game import TicTacToe
-from agent import RandomAgent
+from agent import SmartAgent
 
 pygame.init()
 
@@ -19,7 +19,7 @@ pygame.display.set_caption("Ristinolla")
 
 game = TicTacToe()
 current_player = "X"
-agent = RandomAgent("O")
+agent = SmartAgent("O",game)
 
 def draw_grid():
     for i in range(1, GRID_SIZE):
