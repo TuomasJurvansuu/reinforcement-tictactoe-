@@ -54,7 +54,10 @@ def reset_game():
     game = TicTacToe()
     agent = SmartAgent("O", game)  # 🔥 Nollataan myös AI
     current_player = "X"
+
 running = True
+game_over = False
+
 while running:
     screen.fill(WHITE)
     draw_grid()
@@ -67,18 +70,21 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if button_rect.collidepoint(event.pos):
                 reset_game()
-            else:
+                game_over = False
+            elif not game_over:
                 cell = cell_from_mouse(event.pos)
                 if game.board[cell] == " ":
                     game.board[cell] = current_player
                     winner = game.check_winner()
                     if winner:
                         print(f"Pelaaja {winner} voitti!")
+                        game_over = True
                     elif game.is_draw():
                         print("Peli päättyi tasapeliin!")
+                        game_over = True
                     else:
                         current_player = "O"
-    if running and current_player == "O":
+    if not game_over and current_player == "O":
         pygame.time.delay(500)
         ai_move = agent.choose_move(game.board)
         if ai_move is not None:
@@ -86,8 +92,10 @@ while running:
             winner = game.check_winner()
             if winner:
                 print(f"Pelaaja {winner} voitti!")
+                game_over = True
             elif game.is_draw():
                 print("Peli päättyi tasapeliin!")
+                game_over = True
             else:
                 current_player = "X"
     
