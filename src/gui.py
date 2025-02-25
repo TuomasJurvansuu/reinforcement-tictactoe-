@@ -11,9 +11,11 @@ GRID_SIZE = 3
 CELL_SIZE = WIDTH // GRID_SIZE
 LINE_WIDTH = 10
 BLACK = (0, 0, 0)
-WHITE = ( 255, 255, 255)
 FONT = pygame.font.Font(None, 120)
 BUTTON_FONT = pygame.font.Font(None, 40)
+WINNER_FONT = pygame.font.Font(None, 60)
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ristinolla")
@@ -22,7 +24,9 @@ game = TicTacToe()
 current_player = "X"
 agent = SmartAgent("O",game)
 
-button_rect = pygame.Rect(WIDTH // 4, HEIGHT - 60, WIDTH // 2, 40)  # Keskelle asetettu nappi
+button_rect = pygame.Rect(WIDTH // 4, HEIGHT - 60, WIDTH // 2, 40)
+
+winner_text = ""
 
 
 def draw_grid():
@@ -44,17 +48,25 @@ def cell_from_mouse(pos):
     row = y // CELL_SIZE
     col = x // CELL_SIZE
     return row * GRID_SIZE + col
+
 def draw_button():
     pygame.draw.rect(screen, BLACK, button_rect)
     text = BUTTON_FONT.render("Uusi peli", True, WHITE)
     text_rect = text.get_rect(center=button_rect.center)
     screen.blit(text, text_rect)
+    
 def reset_game():
     global game, current_player, agent
     game = TicTacToe()
-    agent = SmartAgent("O", game)  # 🔥 Nollataan myös AI
+    agent = SmartAgent("O", game)
     current_player = "X"
-
+    
+def draw_winner():
+    if winner_text:
+        text = WINNER_FONT.render(winner_text, True, RED)
+        text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        screen.blit(text, text_rect)
+    
 running = True
 game_over = False
 
@@ -63,6 +75,7 @@ while running:
     draw_grid()
     draw_marks()
     draw_button()
+    draw_winner()
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -77,10 +90,10 @@ while running:
                     game.board[cell] = current_player
                     winner = game.check_winner()
                     if winner:
-                        print(f"Pelaaja {winner} voitti!")
+                        winner_text = f"Pelaaja {winner} voitti!"
                         game_over = True
                     elif game.is_draw():
-                        print("Peli päättyi tasapeliin!")
+                        winner_text = "Peli päättyi tasapeliin!"
                         game_over = True
                     else:
                         current_player = "O"
@@ -91,10 +104,10 @@ while running:
             game.board[ai_move] = "O"
             winner = game.check_winner()
             if winner:
-                print(f"Pelaaja {winner} voitti!")
+                winner_text = f"Pelaaja {winner} voitti!"
                 game_over = True
             elif game.is_draw():
-                print("Peli päättyi tasapeliin!")
+                winner_text = "Peli päättyi tasapeliin!"
                 game_over = True
             else:
                 current_player = "X"
