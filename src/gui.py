@@ -2,10 +2,9 @@ import pygame
 
 pygame.init()
 
+# Ikkunan asetukset
 WIDTH, HEIGHT = 500, 500
-
 WHITE = (255, 255, 255)
-
 GRID_SIZE = 3
 CELL_SIZE = WIDTH // GRID_SIZE
 LINE_WIDTH = 10
@@ -20,6 +19,12 @@ def draw_grid():
         pygame.draw.line(screen, BLACK, (i * CELL_SIZE, 0), (i * CELL_SIZE, HEIGHT), LINE_WIDTH)
         pygame.draw.line(screen, BLACK, (0, i * CELL_SIZE), (WIDTH, i * CELL_SIZE), LINE_WIDTH)
 
+def cell_from_mouse(pos):
+    x, y = pos
+    row = y // CELL_SIZE
+    col = x // CELL_SIZE
+    return row * GRID_SIZE + col
+
 running = True
 while running:
     screen.fill(WHITE)
@@ -27,6 +32,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            cell = cell_from_mouse(event.pos)
+            print(cell)
 
     pygame.display.flip()
 
