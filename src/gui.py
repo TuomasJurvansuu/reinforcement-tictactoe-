@@ -5,7 +5,7 @@ from agent import SmartAgent
 pygame.init()
 
 # Ikkunan asetukset
-WIDTH, HEIGHT = 500, 500
+WIDTH, HEIGHT = 500, 550
 WHITE = (255, 255, 255)
 GRID_SIZE = 3
 CELL_SIZE = WIDTH // GRID_SIZE
@@ -13,6 +13,7 @@ LINE_WIDTH = 10
 BLACK = (0, 0, 0)
 WHITE = ( 255, 255, 255)
 FONT = pygame.font.Font(None, 120)
+BUTTON_FONT = pygame.font.Font(None, 40)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ristinolla")
@@ -20,6 +21,9 @@ pygame.display.set_caption("Ristinolla")
 game = TicTacToe()
 current_player = "X"
 agent = SmartAgent("O",game)
+
+button_rect = pygame.Rect(WIDTH // 4, HEIGHT - 60, WIDTH // 2, 40)  # Keskelle asetettu nappi
+
 
 def draw_grid():
     for i in range(1, GRID_SIZE):
@@ -40,29 +44,40 @@ def cell_from_mouse(pos):
     row = y // CELL_SIZE
     col = x // CELL_SIZE
     return row * GRID_SIZE + col
-
+def draw_button():
+    pygame.draw.rect(screen, BLACK, button_rect)
+    text = BUTTON_FONT.render("Uusi peli", True, WHITE)
+    text_rect = text.get_rect(center=button_rect.center)
+    screen.blit(text, text_rect)
+def reset_game():
+    global game, current_player, agent
+    game = TicTacToe()
+    agent = SmartAgent("O", game)  # 🔥 Nollataan myös AI
+    current_player = "X"
 running = True
 while running:
     screen.fill(WHITE)
     draw_grid()
     draw_marks()
+    draw_button()
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            cell = cell_from_mouse(event.pos)
-            if game.board[cell] == " ":
-                game.board[cell] = current_player
-                winner = game.check_winner()
-                if winner:
-                    print(f"Pelaaja {winner} voitti!")
-                    running = False
-                elif game.is_draw():
-                    print("Peli päättyi tasapeliin!")
-                    running = False
-                if running:
-                    current_player = "O"
+            if button_rect.collidepoint(event.pos):
+                reset_game()
+            else:
+                cell = cell_from_mouse(event.pos)
+                if game.board[cell] == " ":
+                    game.board[cell] = current_player
+                    winner = game.check_winner()
+                    if winner:
+                        print(f"Pelaaja {winner} voitti!")
+                    elif game.is_draw():
+                        print("Peli päättyi tasapeliin!")
+                    else:
+                        current_player = "O"
     if running and current_player == "O":
         pygame.time.delay(500)
         ai_move = agent.choose_move(game.board)
