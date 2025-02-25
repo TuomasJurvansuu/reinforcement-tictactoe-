@@ -1,1 +1,1 @@
-# reinforcement-tictactoe-
+# smart-tictactoe
