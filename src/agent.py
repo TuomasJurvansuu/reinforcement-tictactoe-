@@ -22,6 +22,9 @@ class SmartAgent:
                 board[move] = " "
                 return move
             board[move] = " "
+        # keskelle siirto jos mahdollista
+        if 4 in available_moves:
+            return 4
 
         
         return random.choice(available_moves) if available_moves else None
